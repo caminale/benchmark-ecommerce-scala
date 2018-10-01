@@ -1,0 +1,13 @@
+
+# Routes
+#-----------------------
+
+# Launch customer scenario
+GET     /customer/scenario           controllers.CustomerController.mainRoute
+
+#Setup fauna
+GET     /fauna                       controllers.CustomerController.setUpFauna
+
+#Cleaning Database
+GET     /clean                       controllers.CustomerController.cleanDatabase()
+

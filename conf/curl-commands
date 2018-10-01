@@ -1,0 +1,9 @@
+## cURL POST with Json (generic)
+curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:3000/data
+
+
+## insert a product
+curl -d '{"id":"1", "name":"watch", "price":"143", "category":"wearable", "description":"cool watch to wear", "brand":"tissot"}' -H "Content-Type: application/json" -X POST http://localhost:9000/product
+
+## insert a user
+curl -d '{"id":"1", "name":"watch", "email":"hello@octo.com"}' -H "Content-Type: application/json" -X POST http://localhost:9000/user

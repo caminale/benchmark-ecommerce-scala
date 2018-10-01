@@ -1,0 +1,49 @@
+<!-- https://www.playframework.com/documentation/latest/SettingsLogger -->
+<configuration>
+
+  <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <param name="Append" value="true" />
+    <file>${application.home:-.}/logs/application.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- Daily rollover with compression -->
+      <fileNamePattern>${application.home:-.}/logs/application-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+      <!-- keep 1 days worth of history -->
+      <cleanHistoryOnStart>true</cleanHistoryOnStart>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%level] -- %logger - %X{method} - [%thread] -- %message%n%xException</pattern>    </encoder>
+  </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%date %coloredLevel -- %logger - %X{method} - [%thread] -- %message{40}%n%xException{10}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="ASYNCFILE" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="FILE" />
+  </appender>
+
+  <appender name="ASYNCSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="STDOUT" />
+  </appender>
+
+  <!-- default loggers provided by Play-->
+  <logger name="play" level="INFO" />
+  <logger name="application" level="DEBUG" />
+
+  <!-- My loggers-->
+  <logger name="dao.ManagerRequest" level ="INFO" />
+  <logger name="dao.cockroach" level ="INFO" />
+  <logger name="dao.spanner" level ="INFO" />
+  <logger name="dao.fauna" level ="DEBUG" />
+  <logger name="controllers.CustomerController" level = "INFO"/>
+  <logger name="filters.ExampleFilter" level = "INFO"/>
+
+  <root level="WARN">
+    <appender-ref ref="ASYNCFILE" />
+    <appender-ref ref="ASYNCSTDOUT" />
+  </root>
+</configuration>

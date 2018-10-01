@@ -1,0 +1,88 @@
+version: '3'
+
+networks:
+  roachnet:
+    driver: bridge
+volumes:
+  roachvolume01: {}
+  roachvolume02: {}
+  roachvolume03: {}
+  roachvolume04: {}
+  grafana_lib: {}
+  prometheus_data: {}
+  prometheus_config:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+
+services:
+  roach1:
+    image: cockroachdb/cockroach:v2.0.0
+    hostname: roach1
+    ports:
+      - '26257:26257'
+      - '8080:8080'
+    volumes:
+      - roachvolume01:/cockroach/cockroach-data
+    networks:
+      - roachnet
+    command: start --insecure
+  roach2:
+    image: cockroachdb/cockroach:v2.0.0
+    hostname: roach2
+    volumes:
+      - roachvolume02:/cockroach/cockroach-data
+    networks:
+      - roachnet
+    command: start --insecure --join=roach1
+  roach3:
+    image: cockroachdb/cockroach:v2.0.0
+    hostname: roach3
+    volumes:
+      - roachvolume03:/cockroach/cockroach-data
+    networks:
+      - roachnet
+    command: start --insecure --join=roach1
+  roach4:
+    image: cockroachdb/cockroach:v2.0.0
+    hostname: roach4
+    volumes:
+      - roachvolume04:/cockroach/cockroach-data
+    networks:
+      - roachnet
+    command: start --insecure --join=roach1
+  haproxy:
+    build: ./haproxy
+    hostname: haproxy
+    ports:
+      - '5432:5432'
+      - '6080:6080'
+    networks:
+      - roachnet
+    depends_on:
+      - roach1
+      - roach2
+      - roach3
+  prometheus:
+      image: prom/prometheus:v2.1.0
+      ports:
+        - 9090:9090
+      networks:
+        - roachnet
+      volumes:
+        - prometheus_data:/prometheus
+        - prometheus_config:/prometheus/
+        - ${PWD}/prometheus-server/config/targets/prometheus.json:/etc/prometheus/targets/prometheus.json
+        - ${PWD}/prometheus-server/config/targets/grafana.json:/etc/prometheus/targets/grafana.json
+      command:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--storage.tsdb.path=/prometheus'
+  grafana:
+      image: grafana/grafana:4.6.3
+      ports:
+        - "3000:3000"
+      networks:
+        - roachnet
+      volumes:
+        - grafana_lib:/var/lib/grafana
+
