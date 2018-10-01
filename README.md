@@ -64,6 +64,6 @@ internally this scenario ?
 * Scenario insert a record into the db's table "bench" to say I'm ready to start the bench
 * We have to change boolean to true in the table bench into the db to say to api : "yes u can start"
 * Scenario start to create list actions for a customer (async for each customers)
-* Scenario run each actions and send it to "manager_request". It's pool of threads, they will
+* Scenario run each actions and send it to "manager_request". It's a pool of threads, threads will
 unstack actions list, and send the action to the db selected
  
