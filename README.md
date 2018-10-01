@@ -21,7 +21,7 @@ You will need the following things properly installed on your computer.
 
 ## Cockroach deployment
 
-###Local 
+### Local 
 
 To launch a cockroach Cluster & HAproxy loadbalancer with docker-compose :
 
@@ -51,7 +51,7 @@ curl 0.0.0.0:9000/customer/scenario
 ``` 
 ![alt text](public/images/global_stack_cockroach_local.png "global stack")
 
-###On GCP 
+### On GCP 
  ---> sooon
 ## scala api e-commerce scenario :
 
