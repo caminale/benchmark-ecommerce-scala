@@ -6,14 +6,14 @@ Benchmark Cockroach/Spanner and Fauna in the future, on e-commerce scenarios
 
 You will need the following things properly installed on your computer.
 
-##### mac OSX
+### mac OSX
 
 * [sbt](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Mac.html)
 `brew update & brew install sbt` 
 * [Docker](https://docs.docker.com/docker-for-mac/install/) 
 * [docker-compose](https://docs.docker.com/compose/install/) 
 
-##### Linux
+### Linux
 
 * [sbt](https://www.scala-sbt.org/0.13/docs/Installing-sbt-on-Linux.html) 
 * [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) 
@@ -21,7 +21,7 @@ You will need the following things properly installed on your computer.
 
 ## Cockroach deployment
 
-####Local 
+### Local 
 
 To launch a cockroach Cluster & HAproxy loadbalancer with docker-compose :
 
@@ -51,9 +51,8 @@ curl 0.0.0.0:9000/customer/scenario
 ``` 
 ![alt text](public/images/global_stack_cockroach_local.png "global stack")
 
-
-####On GCP 
-
+### On GCP 
+ ---> sooon
 ## scala api e-commerce scenario :
 
 When we call the route customer/scenario, that launch the benchmark. And how works
