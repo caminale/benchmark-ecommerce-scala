@@ -160,7 +160,6 @@ class CustomerController @Inject()(config: Configuration)(controllerComponents: 
 
     import java.util.UUID.randomUUID
 
-    benchRepository.insertStarterBench(randomUUID().toString, true)
 
     val nbrCustomers: Int = config.underlying.getInt("api.nbrCustomers")
     val nbrProducts: Int = config.underlying.getInt("api.nbrProducts")
@@ -172,6 +171,7 @@ class CustomerController @Inject()(config: Configuration)(controllerComponents: 
     // Create list of all cutomers actions
     logger.debug("le nbr de avProducts " + availableProducts.size)
 
+    benchRepository.insertStarterBench(randomUUID().toString, true)
 
     var isReady: Boolean = false
 
