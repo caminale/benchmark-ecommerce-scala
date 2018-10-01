@@ -49,7 +49,7 @@ Launch customer scenario benchmark :
 ```
 curl 0.0.0.0:9000/customer/scenario
 ``` 
-![alt text](public/images/global_stack_local_cockroach.png "global stack")
+![alt text](public/images/global_stack_cockroach_local.png "global stack")
 
 
 ####On GCP 
