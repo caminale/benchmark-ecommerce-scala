@@ -32,7 +32,10 @@ docker-compose up
 
 After this commands lines, we have to configure application.conf.
 Set url to 0.0.0.0:5432 haproxy ip and set typeDB to cockroach
+
 ![alt text](public/images/typeDB_config.png "Description goes here")
+
+
 ![alt text](public/images/url_config.png "Description goes here")
 
 
