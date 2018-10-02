@@ -66,3 +66,48 @@ internally this scenario ?
 * Scenario run each actions and send it to "manager_request". It's a pool of threads, threads will
 unstack actions list, and send the action to the db selected
  
+## Project Architecture
+
+![project-structure](public/images/project-structure.png "project-structure")
+The most useful and important directories are:
+
+* app
+* conf
+
+**app** contains everything related to the **scenario** and the **databases** implementations
+
+**conf** contains every config file needed for the scenario
+
+### app architecture
+
+![app-structure](public/images/app-structure-dir.png "app-structure")
+
+There are several important directories:
+
+* actions
+* controllers
+* dao
+* models
+* filters
+
+
+**actions** directory contains the definition of the actions a customer can do.
+
+**controllers** directory is the directory containing the scenario details and logic. *CustomerController* is equivalent to a main file.
+
+**dao** directory contains all the file related to the database implementation of the *actions* and the *thread pool*.
+
+**models** directory contains the case class definition of all the data model.
+
+**filters** directory is mandatory (otherwise the application fails to run). It is useful for database request delay measurement.
+
+### conf structure
+
+![conf-structure](public/images/conf-structure.png "conf-structure")
+
+The conf directory contains several configurations files:
+
+* *application.conf* -> all the parameters of the api scenario are here.
+* *init-schemas.sql* -> sql queries to init cockroach schema. (doesn't work for Spanner)
+* *logback.xml* -> where to set up and config logs behavior.
+* *routes* -> defined by PlayAPI, it binds route and function to run when the route is triggered.
