@@ -171,17 +171,6 @@ class CustomerController @Inject()(config: Configuration)(controllerComponents: 
     // Create list of all cutomers actions
     logger.debug("le nbr de avProducts " + availableProducts.size)
 
-    benchRepository.insertStarterBench(randomUUID().toString, true)
-
-    var isReady: Boolean = false
-
-    while(!isReady) {
-      isReady = Await.result(benchRepository.getStarterBench(), 10 second)
-      Thread.sleep(1000)
-      isReady
-    }
-
-    val startTime = System.currentTimeMillis()
 
 
     availableProducts = r.shuffle(availableProducts)
@@ -197,6 +186,18 @@ class CustomerController @Inject()(config: Configuration)(controllerComponents: 
         primaryActions
       }
     } yield customerActions
+
+    benchRepository.insertStarterBench(randomUUID().toString, true)
+
+    var isReady: Boolean = false
+
+    while(!isReady) {
+      isReady = Await.result(benchRepository.getStarterBench(), 10 second)
+      Thread.sleep(1000)
+      isReady
+    }
+
+    val startTime = System.currentTimeMillis()
 
     runBenchmark(customersActions)
 
