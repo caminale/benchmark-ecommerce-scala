@@ -39,31 +39,33 @@ Set url to 0.0.0.0:5432 haproxy ip and set typeDB to cockroach
 ![alt text](public/images/url_config.png "Description goes here")
 
 
-Start api :
-
-```
-sbt run
-``` 
-
-Launch customer scenario benchmark : 
-```
-curl 0.0.0.0:9000/customer/scenario
-``` 
 ![alt text](public/images/global_stack_cockroach_local.png "global stack")
 
 ### On GCP 
  ---> sooon
 ## scala api e-commerce scenario :
 
-When we call the route customer/scenario, that launch the benchmark. And how works
-internally this scenario ?
+* Start api :
+```
+sbt run
+``` 
 
-* Scenario close all connections with the databases and clean the db to have idempotent benchmark
-* Scenario load a pool of customers and products
-* Scenario creates associate some actions to each customer 
-* Scenario insert a record into the db's table "bench" to say I'm ready to start the bench
-* We have to change boolean to true in the table bench into the db to say to api : "yes u can start"
-* Scenario start to create list actions for a customer (async for each customers)
-* Scenario run each actions and send it to "manager_request". It's a pool of threads, threads will
-unstack actions list, and send the action to the db selected
- 
+* Launch customer scenario benchmark in local : 
+```
+curl 0.0.0.0:9000/customer/scenario
+``` 
+* What happens ?
+    * Api will load a pool of customers and products from the database
+    * It will associate actions to each customer
+    * After that it will insert a row into the table : 'bench' to say "OK I'm ready"
+    * When we saw this row added, we can change the boolean to true into table bench where id = 'starter'
+    * When we change this boolean, the api run it scenario 
+
+* What does this scenario ?
+    * Customers arrive asynchronously moreover each customer have a thinking time (random 0 upto 50ms)
+    * Each action for a customer are executed synchronously
+    * Each actions are sent to a "Manager request" 
+    * Manager request is a pool of threads, and each thread will unstack action and execute it
+    to the database. this process is synchronous, each threads wait the db's response
+    
+    
