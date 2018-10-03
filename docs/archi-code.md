@@ -7,7 +7,7 @@ Project architecture
 
 **app** contains everything related to the **scenario** and the **databases** implementations
 
-![app-structure](public/images/app-structure-dir.png "app-structure")
+![app-structure](../public/images/app-structure-dir.png "app-structure")
 
 * actions :
     * contains the definition of the actions a customer can do.
@@ -25,7 +25,7 @@ Project architecture
 
 **conf** contains every config file needed for the scenario
 
-![conf-structure](public/images/conf-structure.png "conf-structure")
+![conf-structure](../public/images/conf-structure.png "conf-structure")
 
 
 The conf directory contains several configurations files:
