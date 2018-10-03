@@ -164,7 +164,6 @@ class CustomerController @Inject()(config: Configuration)(controllerComponents: 
     val nbrCustomers: Int = config.underlying.getInt("api.nbrCustomers")
     val nbrProducts: Int = config.underlying.getInt("api.nbrProducts")
     val nbrProductsToAdd: Int = config.underlying.getInt("api.nbrProductsToAdd")
-    val nbrBench: Int = config.underlying.getInt("api.nbrRunBenchMark")
 
     var (availableProducts, selectedCustomersID): (List[AvailableProduct], List[String]) = init(nbrCustomers, nbrProducts)
 

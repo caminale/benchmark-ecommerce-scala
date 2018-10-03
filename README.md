@@ -1,27 +1,29 @@
 # benchmark-ecommerce-scala
 Benchmark Cockroach/Spanner and Fauna in the future, on e-commerce scenarios
+The goal of this project it's to bench/test different distributed & transactional databases.
+For this moment we only test OLTP transactions, maybe in the future OLAP scenario will be implemented.
+This api will simulate client charge on db, like 30k customers with differrent kind of actions 
+as : open an order, read product, insert product into basket, validate order...
 
+## Local deployment
 
-## Prerequisites
+### Prerequisites
 
 You will need the following things properly installed on your computer.
 
-### mac OSX
+#### mac OSX
 
 * [sbt](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Mac.html)
 `brew update & brew install sbt` 
 * [Docker](https://docs.docker.com/docker-for-mac/install/) 
 * [docker-compose](https://docs.docker.com/compose/install/) 
 
-### Linux
+#### Linux
 
 * [sbt](https://www.scala-sbt.org/0.13/docs/Installing-sbt-on-Linux.html) 
 * [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) 
 * [docker-compose](https://docs.docker.com/compose/install/) 
 
-## Cockroach deployment
-
-### Local 
 
 To launch a cockroach Cluster & HAproxy loadbalancer with docker-compose :
 
