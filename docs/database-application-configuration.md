@@ -1,6 +1,6 @@
 ## Configure application :
 
-Configuration file is : *application.conf* into conf directory.
+Configuration file is : [application.conf](../conf/application.conf) into conf directory.
 At the eof there are a dbs object, and an api object. These 2 objects are the configurations of the 
 db and configuration of the api. 
 
