@@ -21,7 +21,7 @@ So you only have to change 2 parameters : **ip:port** + **dbname**
 
 Google Spanner : 
 
-If you don't have a gcp project setup I redirect you to [this tuto](docs/gcp-configs.md)
+If you don't have a gcp project setup I redirect you to [this tuto](gcp-configs.md)
 If you have already a project gcp setup with an account service key json with the rigths roles spanner 
 you can continue : 
 
