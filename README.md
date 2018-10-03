@@ -64,6 +64,6 @@ Project architecture
 * **app** : contains all the code of the bench
 * **conf** : contains configuration db + api and conf about logs
 
-to see more click [here](docs/database-application-configuration.md)
+to see more click [here](docs/archi-code.md)
 
 
