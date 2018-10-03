@@ -19,7 +19,7 @@ import scala.concurrent.ExecutionContext
   * It is used below by the `map` method.
   */
 @Singleton
-class ExampleFilter @Inject() (implicit ec: ExecutionContext) extends EssentialFilter {
+class LoggingFilter @Inject()(implicit ec: ExecutionContext) extends EssentialFilter {
   def apply(nextFilter: EssentialAction) = new EssentialAction {
     def apply(requestHeader: RequestHeader) = {
       MDC.put("method", "TimeBenchMark")

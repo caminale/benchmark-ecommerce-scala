@@ -68,45 +68,43 @@ curl 0.0.0.0:9000/customer/scenario
     * Manager request is a pool of threads, and each thread will unstack action and execute it
     to the database. this process is synchronous, each threads wait the db's response
     
-## project architecture    
+Project architecture 
+-
+ 
+### App directories:
 
-* app
-* conf
 
 **app** contains everything related to the **scenario** and the **databases** implementations
 
-**conf** contains every config file needed for the scenario
-
-### app architecture
-
 ![app-structure](public/images/app-structure-dir.png "app-structure")
 
-There are several important directories:
 
-* actions
+* actions :
+    * contains the definition of the actions a customer can do.
 * controllers
+    * containing the scenario details and logic. *CustomerController* is equivalent to a main file.
 * dao
+    * contains all the file related to the database implementation of the *actions* and the *thread pool*.
 * models
+    * contains the case class definition of all the data model : Customer, Product...
 * filters
+    * wrap an action (httpRequest) and log the total response time 
 
-
-**actions** directory contains the definition of the actions a customer can do.
-
-**controllers** directory is the directory containing the scenario details and logic. *CustomerController* is equivalent to a main file.
-
-**dao** directory contains all the file related to the database implementation of the *actions* and the *thread pool*.
-
-**models** directory contains the case class definition of all the data model.
-
-**filters** directory is mandatory (otherwise the application fails to run). It is useful for database request delay measurement.
 
 ### conf structure
 
+**conf** contains every config file needed for the scenario
+
 ![conf-structure](public/images/conf-structure.png "conf-structure")
+
 
 The conf directory contains several configurations files:
 
-* *application.conf* -> all the parameters of the api scenario are here.
-* *init-schemas.sql* -> sql queries to init cockroach schema. (doesn't work for Spanner)
-* *logback.xml* -> where to set up and config logs behavior.
-* *routes* -> defined by PlayAPI, it binds route and function to run when the route is triggered.
+* *application.conf* 
+    * all the parameters of the api scenario are here.
+* *init-schemas.sql* 
+    * sql queries to init cockroach schema. (doesn't work for Spanner)
+* *logback.xml* 
+    * where to set up and config logs behavior.
+* *routes* 
+    * defined by PlayAPI, it binds route and function to run when the route is triggered.
