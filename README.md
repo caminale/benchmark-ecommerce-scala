@@ -31,14 +31,6 @@ prerequies for gcp deployment
 -
 go [here](docs/gcp-configs.md) to config your account gcp
 
-
-
-![alt text](public/images/typeDB_config.png "Description goes here")
-
-
-![alt text](public/images/url_config.png "Description goes here")
-
-
 ![alt text](public/images/global_stack_cockroach_local.png "global stack")
 
 ### On GCP 
