@@ -11,29 +11,27 @@ as : open an order, read product, insert product into basket, validate order...
 
 You will need the following things properly installed on your computer.
 
-#### mac OSX
 
+#### mac OSX
+##### prerequies for local deployment
 * [sbt](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Mac.html)
 `brew update & brew install sbt` 
 * [Docker](https://docs.docker.com/docker-for-mac/install/) 
 * [docker-compose](https://docs.docker.com/compose/install/) 
 
 #### Linux
-
+##### prerequies for local deployment
 * [sbt](https://www.scala-sbt.org/0.13/docs/Installing-sbt-on-Linux.html) 
 * [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) 
 * [docker-compose](https://docs.docker.com/compose/install/) 
 
 
-To launch a cockroach Cluster & HAproxy loadbalancer with docker-compose :
 
-```
-cd cockroach_Deployment
-docker-compose up
-```
+prerequies for gcp deployment
+-
+go [here](docs/gcp-configs.md) to config your account gcp
 
-After this commands lines, we have to configure application.conf.
-Set url to 0.0.0.0:5432 haproxy ip and set typeDB to cockroach
+
 
 ![alt text](public/images/typeDB_config.png "Description goes here")
 
@@ -45,17 +43,55 @@ Set url to 0.0.0.0:5432 haproxy ip and set typeDB to cockroach
 
 ### On GCP 
  ---> sooon
-## scala api e-commerce scenario logic :
+ 
+## Launch db + api
+### To launch db cockroach in local
 
-* Start api :
+To launch a cockroach Cluster & HAproxy loadbalancer with docker-compose :
+
+```
+cd cockroach_Deployment
+docker-compose up
+```
+#### To launch api in local
+
+
+##### After this commands lines, we have to configure [application.conf](conf/application.conf).
+* Set url to 0.0.0.0:5432 correspond to the haproxy's ip 
+* Set typeDB to 'cockroach'
+* Start api enter this line into the root project's directory:
 ```
 sbt run
 ``` 
 
-* Launch customer scenario benchmark in local : 
+##### Or you can run it in docker's container :
+
+* pull docker image : 
+    
+    ``
+    docker pull camelotte/scala-api:Vconcurrence 
+    ``
+    
+    or 
+    
+    ``docker pull docker pull camelotte/scala-api:V80_20 
+      ``
+* docker run : 
+``
+docker run camelotte/scala-api:V80_20 
+``
+
+* Launch customer scenario benchmark : 
 ```
 curl 0.0.0.0:9000/customer/scenario
-``` 
+```
+
+
+
+
+## scala api e-commerce scenario logic :
+
+
 more about scenario flow [here](docs/api-scenario-logic.md)
 
 Project architecture 
@@ -67,3 +103,6 @@ Project architecture
 to see more click [here](docs/archi-code.md)
 
 
+sudo docker run -d -t -i -e DATABASE_URL='jdbc:postgresql://0.0.0.0:5432/octo?tcpKeepAlive=true?socketTimeout=0?sslmode=disable' \-e NBR_THREADS=100 \-e TYPE_DB='cockroach' \-e NBR_CUSTOMERS=200 \-e NBR_PRODUCTS=1000 \-e NBR_PRODUCTS_TO_ADD=1 \-e NBR_STOCK=1000 \-e TIMEOUT=80 \ --name scalaapibenchmark scala-api:Vconcurrence
+sudo docker run -d -t -i -e DATABASE_URL='jdbc:postgresql://0.0.0.0:5432/octo?tcpKeepAlive=true?socketTimeout=0?sslmode=disable' \-e NBR_THREADS=100 \-e TYPE_DB='cockroach' \-e NBR_CUSTOMERS=200 \-e NBR_PRODUCTS=1000 \-e NBR_PRODUCTS_TO_ADD=1 \-e NBR_STOCK=1000 \-e TIMEOUT=80 --name scalaapibenchmark camelotte/scala-api:Vconcurrence
+cockroach dump octo --insecure > backup.sql

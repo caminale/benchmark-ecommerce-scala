@@ -32,8 +32,6 @@ The conf directory contains several configurations files:
 
 * *application.conf* 
     * all the parameters of the api scenario are here. See more here [here](database-application-configuration.md)
-* *init-schemas.sql* 
-    * sql queries to init cockroach schema. (doesn't work for Spanner)
 * *logback.xml* 
     * where to set up and config logs behavior. See more [here](https://www.playframework.com/documentation/2.6.x/SettingsLogger)
 * *routes* 

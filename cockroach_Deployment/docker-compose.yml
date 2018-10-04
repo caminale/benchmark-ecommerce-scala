@@ -16,8 +16,9 @@ volumes:
       device: tmpfs
 
 services:
+
   roach1:
-    image: cockroachdb/cockroach:v2.0.0
+    image: cockroachdb/cockroach:v2.0.5
     hostname: roach1
     ports:
       - '26257:26257'
@@ -27,8 +28,9 @@ services:
     networks:
       - roachnet
     command: start --insecure
+
   roach2:
-    image: cockroachdb/cockroach:v2.0.0
+    image: cockroachdb/cockroach:v2.0.5
     hostname: roach2
     volumes:
       - roachvolume02:/cockroach/cockroach-data
@@ -36,21 +38,35 @@ services:
       - roachnet
     command: start --insecure --join=roach1
   roach3:
-    image: cockroachdb/cockroach:v2.0.0
+    image: cockroachdb/cockroach:v2.0.5
     hostname: roach3
     volumes:
       - roachvolume03:/cockroach/cockroach-data
     networks:
       - roachnet
     command: start --insecure --join=roach1
+
   roach4:
-    image: cockroachdb/cockroach:v2.0.0
+    image: cockroachdb/cockroach:v2.0.5
     hostname: roach4
     volumes:
       - roachvolume04:/cockroach/cockroach-data
     networks:
       - roachnet
     command: start --insecure --join=roach1
+
+  cockroach-init:
+    image: cockroachdb/cockroach:v2.0.5
+    networks:
+    - roachnet
+    volumes:
+    - ./cockroach/setup_db.sh:/setup_db.sh
+    - ./cockroach/backup.sql:/backup.sql
+    entrypoint: "/bin/bash"
+    command: /setup_db.sh
+    depends_on:
+    - roach1
+
   haproxy:
     build: ./haproxy
     hostname: haproxy
@@ -63,26 +79,46 @@ services:
       - roach1
       - roach2
       - roach3
-  prometheus:
-      image: prom/prometheus:v2.1.0
-      ports:
-        - 9090:9090
-      networks:
-        - roachnet
-      volumes:
-        - prometheus_data:/prometheus
-        - prometheus_config:/prometheus/
-        - ${PWD}/prometheus-server/config/targets/prometheus.json:/etc/prometheus/targets/prometheus.json
-        - ${PWD}/prometheus-server/config/targets/grafana.json:/etc/prometheus/targets/grafana.json
-      command:
-        - '--config.file=/etc/prometheus/prometheus.yml'
-        - '--storage.tsdb.path=/prometheus'
-  grafana:
-      image: grafana/grafana:4.6.3
-      ports:
-        - "3000:3000"
-      networks:
-        - roachnet
-      volumes:
-        - grafana_lib:/var/lib/grafana
+
+  api-ecommerce:
+    image: camelotte/scala-api:Vconcurrence
+    hostname: apiBenchmark
+    networks:
+    - roachnet
+    depends_on:
+    - haproxy
+    environment:
+    - DATABASE_URL=jdbc:postgresql://haproxy:5432/octo?tcpKeepAlive=true?socketTimeout=0?sslmode=disable
+    - NBR_THREADS=100
+    - TYPE_DB=cockroach
+    - NBR_CUSTOMERS=200
+    - NBR_PRODUCTS=200
+    - NBR_PRODUCTS_TO_ADD=1
+    - NBR_STOCK=10000
+    - TIMEOUT=15
+    ports:
+    - '9000:9000'
+
+#  prometheus:
+#      image: prom/prometheus:v2.1.0
+#      ports:
+#        - 9090:9090
+#      networks:
+#        - roachnet
+#      volumes:
+#        - prometheus_data:/prometheus
+#        - prometheus_config:/prometheus/
+#        - ${PWD}/prometheus-server/config/targets/prometheus.json:/etc/prometheus/targets/prometheus.json
+#        - ${PWD}/prometheus-server/config/targets/grafana.json:/etc/prometheus/targets/grafana.json
+#      command:
+#        - '--config.file=/etc/prometheus/prometheus.yml'
+#        - '--storage.tsdb.path=/prometheus'
+#  grafana:
+#      image: grafana/grafana:4.6.3
+#      ports:
+#        - "3000:3000"
+#      networks:
+#        - roachnet
+#      volumes:
+#        - grafana_lib:/var/lib/grafana
 
