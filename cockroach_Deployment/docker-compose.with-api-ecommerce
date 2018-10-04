@@ -1,0 +1,21 @@
+version: "3.6"
+
+services:
+  api-ecommerce:
+    image: camelotte/scala-api:Vconcurrence
+    hostname: apiBenchmark
+    networks:
+    - roachnet
+    depends_on:
+    - haproxy
+    environment:
+    - DATABASE_URL=jdbc:postgresql://haproxy:5432/octo?tcpKeepAlive=true?socketTimeout=0?sslmode=disable
+    - NBR_THREADS=100
+    - TYPE_DB=cockroach
+    - NBR_CUSTOMERS=200
+    - NBR_PRODUCTS=200
+    - NBR_PRODUCTS_TO_ADD=1
+    - NBR_STOCK=10000
+    - TIMEOUT=15
+    ports:
+    - '9000:9000'
