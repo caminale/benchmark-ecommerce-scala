@@ -58,28 +58,15 @@ sbt run
 
 ##### Or you can run it in docker's container :
 
-* pull docker image : 
-    
-    ``
-    docker pull camelotte/scala-api:Vconcurrence 
-    ``
-    
-    or 
-    
-    ``docker pull docker pull camelotte/scala-api:V80_20 
-      ``
-* docker run : 
-``
-docker run camelotte/scala-api:V80_20 
-``
-
-* Launch customer scenario benchmark : 
+* If don't already start cluster cockroach you can do :
 ```
-curl 0.0.0.0:9000/customer/scenario
+docker-compose -f docker-compose.yml -f docker-compose.with-api-ecommerce up
 ```
 
-
-
+* If you have already start cockraoch cluster into docker-compose : 
+```
+docker-compose  -f docker-compose.with-api-ecommerce up
+```
 
 ## scala api e-commerce scenario logic :
 
@@ -94,7 +81,3 @@ Project architecture
 
 to see more click [here](docs/archi-code.md)
 
-
-sudo docker run -d -t -i -e DATABASE_URL='jdbc:postgresql://0.0.0.0:5432/octo?tcpKeepAlive=true?socketTimeout=0?sslmode=disable' \-e NBR_THREADS=100 \-e TYPE_DB='cockroach' \-e NBR_CUSTOMERS=200 \-e NBR_PRODUCTS=1000 \-e NBR_PRODUCTS_TO_ADD=1 \-e NBR_STOCK=1000 \-e TIMEOUT=80 \ --name scalaapibenchmark scala-api:Vconcurrence
-sudo docker run -d -t -i -e DATABASE_URL='jdbc:postgresql://0.0.0.0:5432/octo?tcpKeepAlive=true?socketTimeout=0?sslmode=disable' \-e NBR_THREADS=100 \-e TYPE_DB='cockroach' \-e NBR_CUSTOMERS=200 \-e NBR_PRODUCTS=1000 \-e NBR_PRODUCTS_TO_ADD=1 \-e NBR_STOCK=1000 \-e TIMEOUT=80 --name scalaapibenchmark camelotte/scala-api:Vconcurrence
-cockroach dump octo --insecure > backup.sql
