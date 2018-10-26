@@ -12,21 +12,21 @@ as : open an order, read product, insert product into basket, validate order...
 You will need the following things properly installed on your computer.
 
 #### mac OSX
-##### prerequies for local deployment
+##### Prerequisites for local deployment
 * [sbt](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Mac.html)
 `brew update & brew install sbt` 
 * [Docker](https://docs.docker.com/docker-for-mac/install/) 
 * [docker-compose](https://docs.docker.com/compose/install/) 
 
 #### Linux
-##### prerequies for local deployment
+##### Prerequisites for local deployment
 * [sbt](https://www.scala-sbt.org/0.13/docs/Installing-sbt-on-Linux.html) 
 * [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) 
 * [docker-compose](https://docs.docker.com/compose/install/) 
 
 
 
-prerequies for gcp deployment
+Prerequisites for gcp deployment
 -
 go [here](docs/gcp-configs.md) to config your account gcp
 

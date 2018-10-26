@@ -31,16 +31,16 @@
   </appender>
 
   <!-- default loggers provided by Play-->
-  <logger name="play" level="INFO" />
+  <logger name="play" level="DEBUG" />
   <logger name="application" level="DEBUG" />
 
   <!-- My loggers-->
-  <logger name="dao.ManagerRequest" level ="INFO" />
-  <logger name="dao.cockroach" level ="INFO" />
-  <logger name="dao.spanner" level ="INFO" />
+  <logger name="dao.ManagerRequest" level ="DEBUG" />
+  <logger name="dao.cockroach" level ="DEBUG" />
+  <logger name="dao.spanner" level ="DEBUG" />
   <logger name="dao.fauna" level ="DEBUG" />
-  <logger name="controllers.CustomerController" level = "INFO"/>
-  <logger name="filters.ExampleFilter" level = "INFO"/>
+  <logger name="controllers.CustomerController" level = "DEBUG"/>
+  <logger name="filters.LoggingFilter" level = "DEBUG"/>
 
   <root level="WARN">
     <appender-ref ref="ASYNCFILE" />

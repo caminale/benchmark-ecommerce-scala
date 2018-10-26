@@ -1,11 +1,12 @@
-package dao.cockroach
+package dao.postgres
 
 import java.sql.{Connection, PreparedStatement, ResultSet, Savepoint}
 
 import dao.AProductOrderRepository
 import org.slf4j.MDC
 import play.api.Logger
-class CockroachProductOrderRepository(connection: Connection) extends AProductOrderRepository{
+import java.util.UUID
+class PostgresProductOrderRepository(connection: Connection) extends AProductOrderRepository{
 
   val logger: Logger = Logger(this.getClass())
 
@@ -14,12 +15,15 @@ class CockroachProductOrderRepository(connection: Connection) extends AProductOr
   val qUpdate: String = "UPDATE product_orders SET quantity = (SELECT quantity FROM product_orders WHERE id = ? ) + ? WHERE id = ? ;"
   val qUpdateStock: String = "UPDATE stock SET stock = (SELECT stock FROM stock WHERE product_id = ?) - ?  WHERE product_id = ? and (select state from orders where id=? ) = 'PROCESS';"
   val qGetNumberOfProductOrders: String = "SELECT SUM(quantity) FROM product_orders ;"
+  val qTruncate: String = "TRUNCATE product_orders CASCADE;"
 
   val preparedGetProductOrderID: PreparedStatement = connection.prepareStatement(qGetProductOrder)
   val preparedUpdate: PreparedStatement = connection.prepareStatement(qUpdate)
   val preparedInsert: PreparedStatement = connection.prepareStatement(qInsert)
   val preparedUpdateStock: PreparedStatement = connection.prepareStatement(qUpdateStock)
   val preparedGetNumberOfproductOrders: PreparedStatement = connection.prepareStatement(qGetNumberOfProductOrders)
+  val preparedTruncateproductOrders: PreparedStatement = connection.prepareStatement(qTruncate)
+
 
   /**
     * This is an insert Product Order, If the customer has already insert a product into his basket if he wants to
@@ -34,20 +38,20 @@ class CockroachProductOrderRepository(connection: Connection) extends AProductOr
     preparedGetProductOrderID.clearParameters()
     preparedUpdate.clearParameters()
 
-    preparedGetProductOrderID.setString(1, orderID)
-    preparedGetProductOrderID.setString(2, productID)
+    preparedGetProductOrderID.setObject(1, UUID.fromString(orderID))
+    preparedGetProductOrderID.setObject(2, UUID.fromString(productID))
 
-    preparedInsert.setString(1, productID)
-    preparedInsert.setString(2, orderID)
+    preparedInsert.setObject(1, UUID.fromString(productID))
+    preparedInsert.setObject(2, UUID.fromString(orderID))
     preparedInsert.setInt(3, quantity)
-    preparedInsert.setString(4, orderID)
+    preparedInsert.setObject(4, UUID.fromString(orderID))
 
 
 
-    preparedUpdateStock.setString(1, productID)
+    preparedUpdateStock.setObject(1, UUID.fromString(productID))
     preparedUpdateStock.setInt(2, quantity)
-    preparedUpdateStock.setString(3, productID)
-    preparedUpdateStock.setString(4, orderID)
+    preparedUpdateStock.setObject(3, UUID.fromString(productID))
+    preparedUpdateStock.setObject(4, UUID.fromString(orderID))
 
     def runTransaction(sp: Savepoint, nbrRetry: Int = 0, error: String = ""): Unit = {
 
@@ -65,9 +69,9 @@ class CockroachProductOrderRepository(connection: Connection) extends AProductOr
         productOrderID match {
 
           case Some(productOrderID) =>
-            preparedUpdate.setString(1, productOrderID)
+            preparedUpdate.setObject(1, UUID.fromString(productOrderID))
             preparedUpdate.setInt(2, quantity)
-            preparedUpdate.setString(3, productOrderID)
+            preparedUpdate.setObject(3, UUID.fromString(productOrderID))
             preparedUpdate.executeUpdate() match {
               case 1 =>
                 preparedUpdateStock.executeUpdate()
@@ -130,8 +134,20 @@ class CockroachProductOrderRepository(connection: Connection) extends AProductOr
 
   override def delete(OrderID: String, productID: String, quantity: Int): Int = ???
 
-  // no need to implement it because truncate of orders cascade will truncate product_orders
-  override def truncateProductOrder(): Int = 0
+  override def truncateProductOrder(): Int = {
+    MDC.put("method", "truncateProductOrders")
+
+    logger.debug(s"Execute truncateProductOrders() | Connection :  ${connection} | ThreadID : ${Thread.currentThread().getName}")
+
+    preparedTruncateproductOrders.executeUpdate() match {
+      case 1 =>
+        logger.debug(s"Success truncateProductOrders() | Connection :  ${connection} | ThreadID : ${Thread.currentThread().getName}")
+        1
+      case 0 =>
+        logger.debug(s"Failed truncateProductOrders() | Connection :  ${connection} | ThreadID : ${Thread.currentThread().getName}")
+        0
+    }
+  }
 
   override def getNumberOfproductOrders(): Int = {
     MDC.put("method", "getNumberOfproductOrders")

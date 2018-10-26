@@ -172,6 +172,7 @@ class CustomerController @Inject()(config: Configuration)(controllerComponents: 
 
 
 
+
     availableProducts = r.shuffle(availableProducts)
     val orderCustomerDict: List[(String, String)] = associateOrderToCustomer(selectedCustomersID)
 

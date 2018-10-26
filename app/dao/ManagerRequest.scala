@@ -9,6 +9,8 @@ import com.typesafe.config.ConfigFactory
 import dao.cockroach.CockroachRepositories
 import dao.fauna.FaunaRepositories
 import dao.spanner.SpannerRepositories
+import dao.postgres.PostgresRepositories
+
 import org.slf4j.MDC
 import play.api.Logger
 
@@ -29,6 +31,7 @@ object ManagerRequest {
     case Cockroach() => new CockroachRepositories()
     case Fauna()     => new FaunaRepositories()
     case Spanner()   => new SpannerRepositories()
+    case Postgres()   => new PostgresRepositories()
   }
 
   val local : ThreadLocal[Repositories] = ThreadLocal.withInitial[Repositories](() => getDatabaseRepositories())
@@ -45,7 +48,6 @@ object ManagerRequest {
     ec.execute(() => {
 
       val startTime = System.currentTimeMillis()
-
       try {
 
         val res = f(local.get())
@@ -73,6 +75,7 @@ object ManagerRequest {
       case "cockroach" => Cockroach()
       case "fauna" => Fauna()
       case "spanner" => Spanner()
+      case "postgres" => Postgres()
     }
   }
 
